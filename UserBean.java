@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
+import org.json.JSONException;
+
 public class UserBean {
 	public static boolean updateUser(Registe user) throws ClassNotFoundException
 	{
@@ -142,5 +144,18 @@ public class UserBean {
 		}
 		return null;
 	}
-
+	public static void updateUserInfo(String uid,String uname,String tel,String addr) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "update User set uname = '" + uname + "' , tel = '" + tel
+					+ "' , address = '" + addr
+					+ "' where uid = '" + uid + "'";
+			DBOperateTool.update(sql);
+			}
+		catch(SQLException e)
+		{
+			e.printStackTrace(System.err);
+		} 
+		
+	}
 }

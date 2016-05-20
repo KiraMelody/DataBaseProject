@@ -148,7 +148,7 @@ public class RestBean {
 		public static JSONArray RestQueryHot(String rest_id,String begin,String end) throws ClassNotFoundException, JSONException
 		{
 			try{
-				String sql = "select cid,count(order.oid) from order,detail "
+				String sql = "select cid,count(order.oid) as cnt from order,detail "
 						+ "where order.oid = detail.oid and order.rid = detail.rid and rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'"
 						+ "group by count(order.oid) desc";
 				return DBOperateTool.query(sql);

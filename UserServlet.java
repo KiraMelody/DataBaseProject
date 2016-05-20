@@ -57,6 +57,36 @@ public class UserServlet extends HttpServlet {
 				jout.put("address",u.getAddress());
 				response.getWriter().append(jout.toString());
 			}
+			if (chk.get("action").equals("setuserinfo"))
+			{
+				JSONObject jout = new JSONObject();
+				String user_id = chk.get("userid").toString();
+				String uname = chk.get("uname").toString();
+				String tel = chk.get("tel").toString();
+				String address = chk.get("address").toString();
+				UserBean.updateUserInfo (user_id,uname,tel,address);
+				response.getWriter().append(jout.toString());
+			}
+			if (chk.get("action").equals("confirmorder"))
+			{
+				JSONObject jout = new JSONObject();
+				String oid = chk.get("oid").toString();
+				long nowtime = System.currentTimeMillis();
+				String time = String.valueOf(nowtime);
+				DeliveryBean.setArrivalTime(oid,time);
+				jout.put("result","ok");
+				response.getWriter().append(jout.toString());
+			}
+			if (chk.get("action").equals("getorderlist"))
+			{
+				JSONObject jout = new JSONObject();
+				JSONArray arr = new JSONArray();
+				arr = OrderBean.OrderAllforUser(chk.get("userid").toString());
+				arr = makeJsonArray.MakeOrder(arr);
+				jout.put("result","ok");
+				jout.put("data",arr);
+				response.getWriter().append(jout.toString());
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

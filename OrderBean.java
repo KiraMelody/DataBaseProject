@@ -13,12 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 public class OrderBean {
-	public static void addDetail(String oid,String rid,String cid,int camount) throws ClassNotFoundException, SQLException, JSONException
-	{
-		String ccamount = String.valueOf(camount);
-		String sql = "insert into detail(oid,rid,cid,camount)" + "values('" + oid + "','" + rid + "','" + cid + "'," + ccamount + ")";
-		ResultSet rs = (ResultSet) DBOperateTool.query(sql); 
-	}
+	
 	public static String addOrder(String uid,String rid,String time,double total) throws ClassNotFoundException
 	{
 		Connection conn = null;
@@ -26,7 +21,6 @@ public class OrderBean {
 		ResultSet rs = null;
 		try{
 			conn = DBControl.connect();
-			//System.out.println("ok");
 			st = conn.createStatement();
 			String sql = "select count(*) from order";
 			rs = st.executeQuery(sql);
@@ -37,9 +31,8 @@ public class OrderBean {
 			}
 			String str=String.valueOf(number+1);
 			String ttotal=String.valueOf(total);
-			//user.setUser_id(str);
 			sql = "insert into Order(oid,uid,rid,odatetime,ostate,total,cost)" + "values('" + str + "','" + uid +
-			"','" + rid + "','" + time + "','notdone'," + ttotal +"," + ttotal + ")";
+			"','" + rid + "','" + time + "','pending'," + ttotal +"," + ttotal + ")";
 			int nResult = st.executeUpdate(sql);
 			return str;
 		}
@@ -82,6 +75,18 @@ public class OrderBean {
 
 		}
 		return "error";
+	}
+	public static void updateOrder(String oid,String state) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "update Order set ostate = '" + state + "' where oid = '" + oid + "'";
+			DBOperateTool.update(sql);
+			}
+		catch(SQLException e)
+		{
+			e.printStackTrace(System.err);
+		} 
+		
 	}
 	public static JSONArray OrderAllforUser(String user_id) throws ClassNotFoundException, JSONException
 	{

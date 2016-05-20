@@ -48,8 +48,6 @@ public class OrderSeverlet extends HttpServlet {
 			String rid = geT.getString("rid");
 			double total = geT.getDouble("total");
 			JSONArray cui = geT.getJSONArray("data");
-			//response.getWriter().append(cui.toString());
-			//System.out.println("haha");
 			long nowtime = System.currentTimeMillis();
 			String time = String.valueOf(nowtime);
 			//SimpleDateFormat sdFormatter = new SimpleDateFormat
@@ -60,7 +58,7 @@ public class OrderSeverlet extends HttpServlet {
 				JSONObject cuisine = cui.getJSONObject(i);
 				String cid = cuisine.getString("cid");
 				int camount = cuisine.getInt("camount");
-				OrderBean.addDetail(oid,rid,cid,camount);
+				DetailBean.addDetail(oid,rid,cid,camount);
 			}
 			}
 		} catch (JSONException e) {

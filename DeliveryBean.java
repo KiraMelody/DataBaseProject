@@ -24,6 +24,35 @@ public class DeliveryBean {
 		return null; 
 		
 	}
+	public static void setDelivery(String oid,String did,double fee) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "insert into Delivery(oid,fee,delivererid)" + "values('" + oid + "','" + did +
+					"','" + fee + "' )";
+			DBOperateTool.add(sql);
+			OrderBean.updateOrder(oid, "delivering");
+			DBOperateTool.update(sql);
+			}
+		catch(SQLException e)
+		{
+			e.printStackTrace(System.err);
+		} 
+		
+	}
+	public static void setArrivalTime(String oid,String time) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "update Delivery set arrivaltime = " + time + "where oid = '" + oid + "'";
+			DBOperateTool.update(sql);
+			OrderBean.updateOrder(oid, "needconfirm");
+			DBOperateTool.update(sql);
+			}
+		catch(SQLException e)
+		{
+			e.printStackTrace(System.err);
+		} 
+		
+	}
 	public static Delivery getDelivery(String order_id) throws ClassNotFoundException
 	{
 		Connection conn = null;

@@ -67,6 +67,59 @@ public class makeJsonArray {
 		}
 		return arr;
 		}
+	public static JSONArray MakeMenu (String rest_id) throws ClassNotFoundException, JSONException
+	{
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+		JSONArray arr = new JSONArray();
+		try{
+			conn = DBControl.connect();
+			st = conn.createStatement();
+			String sql = "select menu.cid,cname,cdesc,cprice from menu where rid = '" + rest_id + "'";
+			rs = st.executeQuery(sql);
+			arr = RS2JS(rs);
+			return arr;
+		}
+		catch(SQLException e){
+			e.printStackTrace(System.err);
+		} 
+		catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			SQLException te = null;
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					if (te == null) {
+						te = e;
+					}
+				}
+			}
+			
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+					te = e;
+				}
+			}
+
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					if (te == null) {
+						te = e;
+					}
+				}
+			}
+		}
+		return arr;
+		}
 	
 	public static JSONArray MakeOrder (JSONArray arr) throws ClassNotFoundException, JSONException
 	{
