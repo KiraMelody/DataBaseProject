@@ -61,8 +61,8 @@ public class RestServlet extends HttpServlet {
 			{
 				JSONObject jout = new JSONObject();
 				JSONArray arr = new JSONArray();
-				System.out.println(chk.get("userid").toString());
-				System.out.println(DBOperateTool.query("select * from order where uid = '" + chk.get("userid").toString() + "'").toString());
+				//System.out.println(chk.get("userid").toString());
+				//System.out.println(DBOperateTool.query("select * from order where uid = '" + chk.get("userid").toString() + "'").toString());
 				arr = OrderBean.OrderAllforUser(chk.get("userid").toString());
 				arr = makeJsonArray.MakeOrder(arr);
 				jout.put("result","ok");
@@ -88,10 +88,7 @@ public class RestServlet extends HttpServlet {
 		catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 	}
 
 }

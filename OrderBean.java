@@ -87,6 +87,7 @@ public class OrderBean {
 	{
 		try{
 			String sql = "select * from order where uid = '" + user_id + "' order by odatetime desc";
+			System.out.println(DBOperateTool.query(sql).toString());
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){
@@ -110,7 +111,7 @@ public class OrderBean {
 	public static JSONArray OrderAllforDeliverer(String deliverer_id) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select order.oid,uid,odatetime,ostate from order,delivery where delivererid = '" + deliverer_id + "' and order.oid = delivery.oid order by odatetime desc";
+			String sql = "select order.oid,uid,odatetime,ostate,total from order,delivery where delivererid = '" + deliverer_id + "' and order.oid = delivery.oid order by odatetime desc";
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){
@@ -127,7 +128,7 @@ public class OrderBean {
 		try{
 			conn = DBControl.connect();
 			st = conn.createStatement();
-			String sql = "select * from order where oid = '" + order_id + "'";
+			String sql = "select oid,uid,rid,odatetime,ostate,total from order where oid = '" + order_id + "'";
 			rs = st.executeQuery(sql);
 			Order O = new Order(order_id);
 			if (rs.next())
@@ -138,19 +139,16 @@ public class OrderBean {
 				O.setState(rs.getString(5));
 				O.setTotal(rs.getDouble(6));
 				O.setCost(rs.getDouble(7));
+				return O;
 			}
-			return O;
+			else return null;
 		}
 		catch(SQLException e){
 			e.printStackTrace(System.err);
-			Order o = new Order(order_id);
-			return o;
 		} 
 		catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Order o = new Order(order_id);
-			return o;
 		}
 		finally {
 			SQLException te = null;
@@ -183,5 +181,6 @@ public class OrderBean {
 			}
 
 		}
+		return null;
 	}
 }

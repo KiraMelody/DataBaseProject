@@ -69,20 +69,20 @@ public class DBOperateTool {
 
 	}
 
-	public void add(String sql) throws SQLException, ClassNotFoundException {
+	public static void add(String sql) throws SQLException, ClassNotFoundException {
 		executeSQL(sql);
 
 	}
 
-	public void delete(String sql) throws SQLException, ClassNotFoundException {
+	public static void delete(String sql) throws SQLException, ClassNotFoundException {
 		executeSQL(sql);
 	}
 
-	public void update(String sql) throws SQLException, ClassNotFoundException {
+	public static void update(String sql) throws SQLException, ClassNotFoundException {
 		executeSQL(sql);
 	}
 
-	private void executeSQL(String sql) throws SQLException, ClassNotFoundException {
+	private static void executeSQL(String sql) throws SQLException, ClassNotFoundException {
 		Connection con = null;
 		Statement st = null;
 

@@ -7,7 +7,23 @@ import java.sql.Statement;
 
 import javax.naming.NamingException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 public class DeliveryBean {
+	public static JSONArray DeliveryAll() throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "select * from delivery";
+			return DBOperateTool.query(sql);
+			}
+		catch(SQLException e)
+		{
+			e.printStackTrace(System.err);
+		}
+		return null; 
+		
+	}
 	public static Delivery getDelivery(String order_id) throws ClassNotFoundException
 	{
 		Connection conn = null;
@@ -16,14 +32,17 @@ public class DeliveryBean {
 		try{
 			conn = DBControl.connect();
 			st = conn.createStatement();
-			String sql = "select oid,fee,arrivaltime,dilivererid from delivery where oid = '" + order_id + "'";
+			String sql = "select oid,fee,arrivaltime,delivererid from delivery where oid = '" + order_id + "'";
 			rs = st.executeQuery(sql);
 			Delivery R = new Delivery(order_id);
-			R.setFee(rs.getDouble(2));
-			System.out.println(R.getFee());
-			R.setArrivalTime(rs.getString(3));
-			R.setDelivererId(rs.getString(4));
-			return R;
+			if (rs.next())
+			{
+				R.setFee(rs.getDouble(2));
+				R.setArrivalTime(rs.getString(3));
+				R.setDelivererId(rs.getString(4));
+				return R;
+			}
+			else return null;
 		}
 		catch(SQLException e){
 			e.printStackTrace(System.err);

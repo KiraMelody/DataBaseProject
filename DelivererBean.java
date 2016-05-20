@@ -8,7 +8,23 @@ import java.sql.Statement;
 
 import javax.naming.NamingException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 public class DelivererBean {
+	public static JSONArray DelivererAll() throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "select * from deliverer";
+			return DBOperateTool.query(sql);
+			}
+		catch(SQLException e)
+		{
+			e.printStackTrace(System.err);
+		}
+		return null; 
+		
+	}
 	public static Deliverer getDeliverer(String deliverer_id) throws ClassNotFoundException
 	{
 		Connection conn = null;
@@ -17,7 +33,7 @@ public class DelivererBean {
 		try{
 			conn = DBControl.connect();
 			st = conn.createStatement();
-			String sql = "select * from deliverer where delivererid = '" + deliverer_id + "'";
+			String sql = "select delivererid,deliverername,deliverertel from deliverer where delivererid = '" + deliverer_id + "'";
 			rs = st.executeQuery(sql);
 			Deliverer R = new Deliverer(deliverer_id);
 			if (rs.next())
@@ -29,14 +45,10 @@ public class DelivererBean {
 		}
 		catch(SQLException e){
 			e.printStackTrace(System.err);
-			Deliverer r = new Deliverer(deliverer_id);
-			return r;
 		} 
 		catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Deliverer r = new Deliverer(deliverer_id);
-			return r;
 		}
 		finally {
 			SQLException te = null;
@@ -67,8 +79,9 @@ public class DelivererBean {
 					}
 				}
 			}
-
+			
 		}
+		return null;
 	}
 	
 	public static double DelivererQueryFee(String deliverer_id,String begin,String end) throws ClassNotFoundException
@@ -79,7 +92,7 @@ public class DelivererBean {
 		try{
 			conn = DBControl.connect();
 			st = conn.createStatement();
-			String sql = "select sum(fee) from delivery where delivererid = '" + deliverer_id + "'" + " and arrivaltime > '" + begin + "' and arrivaltime < '" + end + "'";
+			String sql = "select sum(fee) as sum from delivery where delivererid = '" + deliverer_id + "'" + " and arrivaltime > '" + begin + "' and arrivaltime < '" + end + "'";
 			rs = st.executeQuery(sql);
 			double fee = rs.getDouble(1);
 			return fee;

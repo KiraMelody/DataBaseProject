@@ -45,6 +45,24 @@ public class DelivererServlet extends HttpServlet {
 		try {
 			chk = new JSONObject (request.getParameter("data"));
 			System.out.println(chk.get("action"));
+			if (chk.get("action").equals("getdeliverylist"))
+			{
+				JSONObject jout = new JSONObject();
+				JSONArray arr = new JSONArray();
+				arr = DeliveryBean.DeliveryAll();
+				jout.put("result","ok");
+				jout.put("data",arr);
+				response.getWriter().append(jout.toString());
+			}
+			if (chk.get("action").equals("getdelivererlist"))
+			{
+				JSONObject jout = new JSONObject();
+				JSONArray arr = new JSONArray();
+				arr = DelivererBean.DelivererAll();
+				jout.put("result","ok");
+				jout.put("data",arr);
+				response.getWriter().append(jout.toString());
+			}
 			if (chk.get("action").equals("getdelivererorderlist"))
 			{
 				JSONObject jout = new JSONObject();

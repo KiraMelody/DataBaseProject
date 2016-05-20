@@ -42,25 +42,37 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			String geT=request.getParameter("test");
+			String geT=request.getParameter("data");
 			JSONObject uuser=null;
 			uuser = new JSONObject(geT);
 			String username="";
 			username = uuser.getString("username");
 			String password="";
 			password = uuser.getString("password");
-			
+			String userrole="";
+			userrole = uuser.getString("userrole");
+			boolean remember=uuser.getBoolean("rememberme");
+			long nowtime = System.currentTimeMillis();
+			if (remember)
+				nowtime=nowtime + 36000;
+			else
+				nowtime=nowtime + 3600;
+			String time = String.valueOf(nowtime);
 			JSONObject jout = new JSONObject();
 			jout.put("result", "ok");
-			Userinfo user = LoginBean.logon(username,password);
-			if (user!=null)
+			String uid = LoginBean.login(username,password,userrole,time);
+			if (uid != null && uid != "error")
 			{
-				HttpSession session = request.getSession();
-				session.setAttribute("session_userinfo", user);
-				jout.put("role",user.getType());
-				response.getWriter().append(jout.toString());
-				System.out.println("µÇÂ¼³É¹¦");
+				//HttpSession session = request.getSession();
+				//session.setAttribute("session_userinfo", user);
+				jout.put("id",uid);
+				//response.getWriter().append(jout.toString());
+				System.out.println("ï¿½ï¿½Â¼ï¿½É¹ï¿½");
 				
+			}
+			else
+			{
+				response.getWriter().append("error");
 			}
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block

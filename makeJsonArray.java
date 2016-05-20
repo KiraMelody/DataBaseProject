@@ -23,7 +23,6 @@ public class makeJsonArray {
 		try{
 			conn = DBControl.connect();
 			st = conn.createStatement();
-			System.out.println(order_id);
 			String sql = "select menu.cid,cname,cdesc,cprice,camount from menu,detail where detail.oid = '" + order_id + "' and menu.cid = detail.cid and detail.rid = menu.rid";
 			rs = st.executeQuery(sql);
 			arr = RS2JS(rs);
@@ -82,8 +81,7 @@ public class makeJsonArray {
 			o.put("oconsumername", u.getName());
 			o.put("oconsumertel", u.getTel());
 			o.put("oconsumeraddr", u.getAddress());
-			//System.out.println(d.getFee());
-			//o.put("odelivererfee", d.getFee());
+			if (d != null)o.put("odelivererfee", d.getFee());
 			ans.put(o);
 		}
 		return ans;

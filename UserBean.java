@@ -105,13 +105,9 @@ public class UserBean {
 		}
 		catch(SQLException e){
 			e.printStackTrace(System.err);
-			User u = new User(user_id);
-			return u;
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			User u = new User(user_id);
-			return u;
 		}
 		finally {
 			SQLException te = null;
@@ -144,6 +140,7 @@ public class UserBean {
 			}
 
 		}
+		return null;
 	}
 
 }

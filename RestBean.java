@@ -51,14 +51,10 @@ public class RestBean {
 			}
 			catch(SQLException e){
 				e.printStackTrace(System.err);
-				Restaurant r = new Restaurant(rest_id);
-				return r;
 			} 
 			catch (NamingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				Restaurant r = new Restaurant(rest_id);
-				return r;
 			}
 			finally {
 				SQLException te = null;
@@ -91,6 +87,7 @@ public class RestBean {
 				}
 
 			}
+			return null;
 		}
 		
 		public static double RestQueryProfit(String rest_id,String begin,String end) throws ClassNotFoundException
@@ -151,9 +148,9 @@ public class RestBean {
 		public static JSONArray RestQueryHot(String rest_id,String begin,String end) throws ClassNotFoundException, JSONException
 		{
 			try{
-				String sql = "select cid,count(*) from order,detail "
-						+ "where order.oid = detail.oid and rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'"
-						+ "group by cid";
+				String sql = "select cid,count(order.oid) from order,detail "
+						+ "where order.oid = detail.oid and order.rid = detail.rid and rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'"
+						+ "group by count(order.oid) desc";
 				return DBOperateTool.query(sql);
 			}
 			catch(SQLException e){
