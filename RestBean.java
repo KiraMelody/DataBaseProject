@@ -4,9 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
-import java.util.List;
-import java.util.Vector;
 
 import javax.naming.NamingException;
 
@@ -35,17 +32,15 @@ public class RestBean {
 			try{
 				conn = DBControl.connect();
 				st = conn.createStatement();
-				String sql = "select * from restaurant where rid = '" + rest_id + "'";
+				String sql = "select rid,rname,tel,address,rdesc from restaurant where rid = '" + rest_id + "'";
 				rs = st.executeQuery(sql);
 				Restaurant R = new Restaurant(rest_id);
 				if (rs.next())
 				{
 					R.setRestName(rs.getString(2));
-					R.setProprietor(rs.getString(3));
-					R.setTel(rs.getString(4));
-					R.setAddress(rs.getString(5));
-					R.setIntroduction(rs.getString(6));
-					R.setProfit(rs.getDouble(7));
+					R.setTel(rs.getString(3));
+					R.setAddress(rs.getString(4));
+					R.setIntroduction(rs.getString(5));
 				}
 				return R;
 			}
@@ -100,7 +95,8 @@ public class RestBean {
 				st = conn.createStatement();
 				String sql = "select sum(total) from order where rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'";
 				rs = st.executeQuery(sql);
-				double profit = rs.getDouble(1);
+				double profit = 0.0;
+				if (rs.next())rs.getDouble(1);
 				return profit;
 			}
 			catch(SQLException e){
@@ -148,10 +144,23 @@ public class RestBean {
 		public static JSONArray RestQueryHot(String rest_id,String begin,String end) throws ClassNotFoundException, JSONException
 		{
 			try{
-				String sql = "select cid,count(order.oid) as cnt from order,detail "
-						+ "where order.oid = detail.oid and order.rid = detail.rid and rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'"
-						+ "group by count(order.oid) desc";
+				String sql = "select cid,count(order.oid) as camount from order,detail "
+						+ "where order.oid = detail.oid and order.rid = detail.rid and order.rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'"
+						+ "group by cid order by 2 desc";
+				//System.out.println(DBOperateTool.query(sql).toString());
 				return DBOperateTool.query(sql);
+			}
+			catch(SQLException e){
+				e.printStackTrace(System.err);
+			} 
+			return null;
+		}
+		public static JSONArray setRestDesc(String rid,String desc) throws ClassNotFoundException, JSONException
+		{
+			try{
+				String sql = "update restaurant set rdesc = '" + desc
+						+ "' where rid = '" + rid + "'";
+				DBOperateTool.update(sql);
 			}
 			catch(SQLException e){
 				e.printStackTrace(System.err);

@@ -67,7 +67,7 @@ public class LoginBean {
 		}
 		return false;
 	}
-	public static String login(String username,String password,String userrole,String time) throws ClassNotFoundException, NamingException
+	public static String login(String username,String password,String userrole,long time) throws ClassNotFoundException, NamingException
 	{
 		Connection conn = null;
 		Statement st = null;
@@ -82,7 +82,7 @@ public class LoginBean {
 				rs = st.executeQuery(sql);
 				while(rs.next())
 				{
-					System.out.println("��½�ɹ�");
+					System.out.println("登陆成功");
 					String uid = rs.getString(1);
 					/*Userinfo user = new Userinfo();
 					user.setUserID(rs.getInt(1));
@@ -91,8 +91,9 @@ public class LoginBean {
 					user.setTel(rs.getString(4));
 					user.setAddress(rs.getString(5));
 					user.setType(rs.getString(6));*/
-					sql = "insert into login(uid,uname,userrole,outtime) values('" + uid + "','" + username + "','" + userrole + "','" + time + "')";
-					rs=st.executeQuery(sql);
+					sql = "insert into login(uid,uname,userrole,outtime) values('" + uid + "','" + username + "','" + userrole + "'," + time + ")";
+					System.out.println(time);
+					st.executeUpdate(sql);
 					return uid;
 				}
 				return "error";

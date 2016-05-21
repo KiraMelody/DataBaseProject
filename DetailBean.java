@@ -24,7 +24,7 @@ public class DetailBean {
 		try{
 			String ccamount = String.valueOf(camount);
 			String sql = "insert into detail(oid,rid,cid,camount)" + "values('" + oid + "','" + rid + "','" + cid + "'," + ccamount + ")";
-			DBOperateTool.query(sql); 
+			DBOperateTool.add(sql); 
 			}
 		catch(SQLException e)
 		{

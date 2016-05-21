@@ -40,13 +40,6 @@ public class RegisteServlet extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException
-	{
-		Class.forName("com.informix.jdbc.IfxDriver");
-		String jdbcURL = "jdbc:informix-sqli://crl.ptopenlab.com:9088/d_1460372072390793:INFORMIXSERVER=ifxserver1;USER=vzyfqfde;PASSWORD=wdAvxgCTil;DB_LOCALE=en_us.utf8";
-		DriverManager.getConnection(jdbcURL);
-		System.out.println("success");
-	}
 	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -54,20 +47,9 @@ public class RegisteServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-		
-		
-		//response.getWriter().append(request.getParameter("test"));
-		//Gson gson = new Gson();
-		
-		
+
 		try {
-			Class.forName("com.informix.jdbc.IfxDriver");
-			String jdbcURL = "jdbc:informix-sqli://crl.ptopenlab.com:9088/d_1460372072390793:INFORMIXSERVER=ifxserver1;USER=vzyfqfde;PASSWORD=wdAvxgCTil;DB_LOCALE=en_us.utf8";
-			DriverManager.getConnection(jdbcURL);
-			String geT=request.getParameter("test");
+			String geT=request.getParameter("data");
 			JSONObject uuser=null;
 			uuser = new JSONObject(geT);
 			String username="";
@@ -88,8 +70,8 @@ public class RegisteServlet extends HttpServlet {
 			result = UserBean.updateUser(userbean);
 			if (result)
 			{
-				HttpSession session = request.getSession();
-				session.setAttribute("session_userinfo", userbean);
+		//		HttpSession session = request.getSession();
+		//		session.setAttribute("session_userinfo", userbean);
 				jout.put("result", "ok");
 				response.getWriter().append(jout.toString());
 				System.out.println("注册成功");
@@ -108,10 +90,6 @@ public class RegisteServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		//doGet(request, response);
- catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

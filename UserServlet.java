@@ -3,6 +3,8 @@ package com.ibm.crl.util;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,13 +45,16 @@ public class UserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		JSONObject chk;
+		Date nowTime = new Date(System.currentTimeMillis());
+		SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time = sdFormatter.format(nowTime);
 		try {
 			chk = new JSONObject (request.getParameter("data"));
 			System.out.println(chk.get("action"));
 			if (chk.get("action").equals("getuserinfo"))
 			{
 				JSONObject jout = new JSONObject();
-				String user_id = chk.get("userid").toString();
+				String user_id = chk.get("uid").toString();
 				User u = UserBean.getUser (user_id);
 				jout.put("result","ok");
 				jout.put("username",u.getName());
@@ -60,28 +65,34 @@ public class UserServlet extends HttpServlet {
 			if (chk.get("action").equals("setuserinfo"))
 			{
 				JSONObject jout = new JSONObject();
-				String user_id = chk.get("userid").toString();
-				String uname = chk.get("uname").toString();
+				String user_id = chk.get("uid").toString();
+				String username = chk.get("username").toString();
 				String tel = chk.get("tel").toString();
 				String address = chk.get("address").toString();
-				UserBean.updateUserInfo (user_id,uname,tel,address);
-				response.getWriter().append(jout.toString());
+				UserBean.updateUserInfo (user_id,username,tel,address);
 			}
 			if (chk.get("action").equals("confirmorder"))
 			{
 				JSONObject jout = new JSONObject();
 				String oid = chk.get("oid").toString();
-				long nowtime = System.currentTimeMillis();
-				String time = String.valueOf(nowtime);
 				DeliveryBean.setArrivalTime(oid,time);
 				jout.put("result","ok");
+				response.getWriter().append(jout.toString());
+			}
+			if (chk.get("action").equals("getcuisinelist"))
+			{
+				JSONObject jout = new JSONObject();
+				JSONArray arr = new JSONArray();
+				arr = makeJsonArray.MakeMenu(chk.get("rid").toString());
+				jout.put("result","ok");
+				jout.put("data",arr);
 				response.getWriter().append(jout.toString());
 			}
 			if (chk.get("action").equals("getorderlist"))
 			{
 				JSONObject jout = new JSONObject();
 				JSONArray arr = new JSONArray();
-				arr = OrderBean.OrderAllforUser(chk.get("userid").toString());
+				arr = OrderBean.OrderAllforUser(chk.get("uid").toString());
 				arr = makeJsonArray.MakeOrder(arr);
 				jout.put("result","ok");
 				jout.put("data",arr);

@@ -92,7 +92,6 @@ public class OrderBean {
 	{
 		try{
 			String sql = "select * from order where uid = '" + user_id + "' order by odatetime desc";
-			System.out.println(DBOperateTool.query(sql).toString());
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){

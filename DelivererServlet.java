@@ -3,6 +3,9 @@ package com.ibm.crl.util;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,6 +45,9 @@ public class DelivererServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		JSONObject chk;
+		Date nowTime = new Date(System.currentTimeMillis());
+		SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time = sdFormatter.format(nowTime);
 		try {
 			chk = new JSONObject (request.getParameter("data"));
 			System.out.println(chk.get("action"));
@@ -82,6 +88,14 @@ public class DelivererServlet extends HttpServlet {
 				double fee = DelivererBean.DelivererQueryFee(deliverer_id,begin,end);
 				jout.put("result","ok");
 				jout.put("data",fee);
+				response.getWriter().append(jout.toString());
+			}
+			if (chk.get("action").equals("delivererconfirm"))
+			{
+				JSONObject jout = new JSONObject();
+				String oid = chk.get("oid").toString();
+				OrderBean.updateOrder(oid,"needconfirm");
+				jout.put("result","ok");
 				response.getWriter().append(jout.toString());
 			}
 		} catch (JSONException e) {

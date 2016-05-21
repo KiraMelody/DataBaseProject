@@ -22,7 +22,7 @@ public class UserBean {
 			System.out.println("ok");
 			st = conn.createStatement();
 			boolean exists = false;
-			String sql = "select * from user where user_name='" + user.getUsername() + "'";
+			String sql = "select * from user where username='" + user.getUsername() + "'";
 			
 			rs = st.executeQuery(sql);
 			if(rs.next())
@@ -41,8 +41,9 @@ public class UserBean {
 			sql = "insert into User(uid,username,tel,address)" + "values('" + user.getId() + "','" + user.getUsername() +
 			"','" + user.getTel() + "','" + user.getAddress() + "' )";
 			int nResult = st.executeUpdate(sql);
-			sql = "insert into account(id,name,password,tel,address,role)" + "values('" + user.getId() + "','" + user.getUsername() +
-					"','"+ user.getTel() + "','" + user.getAddress() + "','" + user.getPassword() + "','user')";
+			sql = "insert into account(uid,username,password,userrole)" + "values('" + user.getId() + "','" + user.getUsername() +
+					"','" + user.getPassword() + "','user')";
+			st.executeUpdate(sql);
 			return nResult == 1;
 		}
 		catch(SQLException e){
@@ -144,10 +145,10 @@ public class UserBean {
 		}
 		return null;
 	}
-	public static void updateUserInfo(String uid,String uname,String tel,String addr) throws ClassNotFoundException, JSONException
+	public static void updateUserInfo(String uid,String username,String tel,String addr) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "update User set uname = '" + uname + "' , tel = '" + tel
+			String sql = "update User set username = '" + username + "' , tel = '" + tel
 					+ "' , address = '" + addr
 					+ "' where uid = '" + uid + "'";
 			DBOperateTool.update(sql);

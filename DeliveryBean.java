@@ -42,9 +42,9 @@ public class DeliveryBean {
 	public static void setArrivalTime(String oid,String time) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "update Delivery set arrivaltime = " + time + "where oid = '" + oid + "'";
+			String sql = "update delivery set arrivaltime = '" + time + "' where oid = '" + oid + "'";
 			DBOperateTool.update(sql);
-			OrderBean.updateOrder(oid, "needconfirm");
+			OrderBean.updateOrder(oid, "finished");
 			DBOperateTool.update(sql);
 			}
 		catch(SQLException e)

@@ -1,6 +1,8 @@
 package com.ibm.crl.util;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
@@ -42,37 +44,38 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			String geT=request.getParameter("data");
-			JSONObject uuser=null;
-			uuser = new JSONObject(geT);
+			JSONObject chk =  new JSONObject (request.getParameter("data"));
+			System.out.println(chk.toString());
+			Date nowTime = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time = sdFormatter.format(nowTime);
+			if (chk.get("action").equals("login"))
+			{
 			String username="";
-			username = uuser.getString("username");
+			username = chk.getString("username");
 			String password="";
-			password = uuser.getString("password");
+			password = chk.getString("password");
 			String userrole="";
-			userrole = uuser.getString("userrole");
-			boolean remember=uuser.getBoolean("rememberme");
+			userrole = chk.getString("userrole");
+			boolean remember=chk.getBoolean("rememberme");
 			long nowtime = System.currentTimeMillis();
 			if (remember)
 				nowtime=nowtime + 36000;
 			else
 				nowtime=nowtime + 3600;
-			String time = String.valueOf(nowtime);
 			JSONObject jout = new JSONObject();
 			jout.put("result", "ok");
-			String uid = LoginBean.login(username,password,userrole,time);
+			String uid = LoginBean.login(username,password,userrole,nowtime);
 			if (uid != null && uid != "error")
 			{
 				//HttpSession session = request.getSession();
 				//session.setAttribute("session_userinfo", user);
 				jout.put("id",uid);
-				//response.getWriter().append(jout.toString());
-				System.out.println("��¼�ɹ�");
-				
 			}
 			else
 			{
 				response.getWriter().append("error");
+			}
 			}
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
@@ -87,6 +90,6 @@ public class LoginServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		}
 	}
 
-}
