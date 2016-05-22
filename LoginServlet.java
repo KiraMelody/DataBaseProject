@@ -43,9 +43,12 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.setContentType("text/json");
+		response.setCharacterEncoding("UTF-8");
 		try {
+			System.out.println(request.getParameter("data"));
 			JSONObject chk =  new JSONObject (request.getParameter("data"));
-			System.out.println(chk.toString());
+			//System.out.println("get");//chk.toString());
 			Date nowTime = new Date(System.currentTimeMillis());
 			SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String time = sdFormatter.format(nowTime);
@@ -59,10 +62,13 @@ public class LoginServlet extends HttpServlet {
 			userrole = chk.getString("userrole");
 			boolean remember=chk.getBoolean("rememberme");
 			long nowtime = System.currentTimeMillis();
+			long lasttime = 0;
 			if (remember)
-				nowtime=nowtime + 36000;
+				lasttime = 36000;
+				//nowtime=nowtime + 36000;
 			else
-				nowtime=nowtime + 3600;
+				lasttime = 3600;
+			nowtime=nowtime + lasttime;
 			JSONObject jout = new JSONObject();
 			jout.put("result", "ok");
 			String uid = LoginBean.login(username,password,userrole,nowtime);
@@ -70,12 +76,19 @@ public class LoginServlet extends HttpServlet {
 			{
 				//HttpSession session = request.getSession();
 				//session.setAttribute("session_userinfo", user);
-				jout.put("id",uid);
+				if (userrole.equals("user"))
+					jout.put("uid",uid);
+				if (userrole.equals("rest"))
+					jout.put("rid",uid);
+				if (userrole.equals("deliverer"))
+					jout.put("delivererid",uid);
+				jout.put("sessionlife",lasttime);
 			}
 			else
 			{
 				response.getWriter().append("error");
 			}
+			response.getWriter().append(jout.toString());
 			}
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block

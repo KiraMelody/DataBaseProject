@@ -93,10 +93,11 @@ public class RestBean {
 			try{
 				conn = DBControl.connect();
 				st = conn.createStatement();
-				String sql = "select sum(total) from order where rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'";
+				System.out.println(rest_id + begin + end);
+				String sql = "select sum(total) as sum from order where rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'";
 				rs = st.executeQuery(sql);
 				double profit = 0.0;
-				if (rs.next())rs.getDouble(1);
+				if (rs.next())profit = rs.getDouble(1);
 				return profit;
 			}
 			catch(SQLException e){

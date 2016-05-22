@@ -47,10 +47,21 @@ public class logout extends HttpServlet {
 			JSONObject uuser=null;
 			try {
 				uuser = new JSONObject(geT);
-				String uid="";
-				uid = uuser.getString("uid");
 				String userrole = "";
 				userrole = uuser.getString("userrole");
+				String uid="";
+				if (userrole.equals("user"))
+				{
+					uid = uuser.getString("uid");
+				}
+				if (userrole.equals("rest"))
+				{
+					uid = uuser.getString("rid");
+				}
+				if (userrole.equals("delivererid"))
+				{
+					uid = uuser.getString("delivererid");
+				}
 				String sql = "delete from login where uid = '" + uid + "' and userrole = '" + userrole + "'";
 				DBOperateTool.delete(sql);
 			} catch (JSONException e) {

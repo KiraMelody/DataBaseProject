@@ -47,7 +47,8 @@ public class RegisteServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
+		response.setContentType("text/json");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			String geT=request.getParameter("data");
 			JSONObject uuser=null;

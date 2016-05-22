@@ -48,6 +48,8 @@ public class UserServlet extends HttpServlet {
 		Date nowTime = new Date(System.currentTimeMillis());
 		SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String time = sdFormatter.format(nowTime);
+		response.setContentType("text/json");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			chk = new JSONObject (request.getParameter("data"));
 			System.out.println(chk.get("action"));
@@ -98,10 +100,34 @@ public class UserServlet extends HttpServlet {
 				jout.put("data",arr);
 				response.getWriter().append(jout.toString());
 			}
+			if (chk.get("action").equals("submitorder"))
+			{
+				String uid = chk.getString("uid");
+				String rid = chk.getString("rid");
+				double total = chk.getDouble("total");
+				JSONArray cui = chk.getJSONArray("data");
+				JSONObject jout = new JSONObject();
+				String oid = OrderBean.addOrder(uid,rid,time,total);
+				if (!(oid.equals("error")))
+				{	
+					for (int i=0;i< cui.length();i++)
+					{
+						JSONObject cuisine = cui.getJSONObject(i);
+						String cid = cuisine.getString("cid");
+						int camount = cuisine.getInt("camount");
+						DetailBean.addDetail(oid,rid,cid,camount);
+					}
+					jout.put("result","ok");
+					response.getWriter().append(jout.toString());
+				}
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 

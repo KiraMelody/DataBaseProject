@@ -139,6 +139,63 @@ public class makeJsonArray {
 		}
 		return ans;
 	}
+	public static JSONArray MakeQuery (JSONArray arr,String rest_id) throws ClassNotFoundException, JSONException, SQLException, NamingException
+	{
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+		try{
+			conn = DBControl.connect();
+			st = conn.createStatement();
+			JSONArray ans = new JSONArray();
+			for (int i = 0; i < arr.length(); i++) 
+			{
+				JSONObject o = arr.getJSONObject(i);
+				String cid = o.get("cid").toString();
+				System.out.println(cid + " " + rest_id);
+				String sql = "select cname,cdesc,cprice from menu where cid = '" + cid + "' and rid = '" + rest_id + "'";
+				rs = st.executeQuery(sql);
+				if (rs.next())
+				{
+				o.put("cname", rs.getString(1));
+				o.put("cdesc", rs.getString(2));
+				o.put("cprice", rs.getDouble(3));
+				}
+				ans.put(o);
+			}
+			return ans;
+		}
+			finally {
+				SQLException te = null;
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+						if (te == null) {
+							te = e;
+						}
+					}
+				}
+				
+				if (st != null) {
+					try {
+						st.close();
+					} catch (SQLException e) {
+						te = e;
+					}
+				}
+
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						if (te == null) {
+							te = e;
+						}
+					}
+				}
+			}
+	}
 		public static JSONArray RS2JS(ResultSet rs) throws SQLException,JSONException  
 		{   
 			JSONArray array = new JSONArray();   
@@ -157,4 +214,5 @@ public class makeJsonArray {
 			}  
 			return array;  
 		}  
+		
 }

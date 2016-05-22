@@ -77,7 +77,7 @@ public class LoginBean {
 			st = conn.createStatement();
 			//boolean exists = false;
 			//if (user.getUserrole()=="user")
-			String sql = "select uid from account where uname = '" + username + "' and password = '" + password + 
+			String sql = "select uid from account where username = '" + username + "' and password = '" + password + 
 					"' and userrole = '" + userrole + "'";
 				rs = st.executeQuery(sql);
 				while(rs.next())
@@ -91,7 +91,7 @@ public class LoginBean {
 					user.setTel(rs.getString(4));
 					user.setAddress(rs.getString(5));
 					user.setType(rs.getString(6));*/
-					sql = "insert into login(uid,uname,userrole,outtime) values('" + uid + "','" + username + "','" + userrole + "'," + time + ")";
+					sql = "insert into login(uid,username,userrole,outtime) values('" + uid + "','" + username + "','" + userrole + "'," + time + ")";
 					System.out.println(time);
 					st.executeUpdate(sql);
 					return uid;

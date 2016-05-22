@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,7 @@ public class RestServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//doPost(request,response);
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -47,12 +50,15 @@ public class RestServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("ok");
+		response.setContentType("text/json");
+		response.setCharacterEncoding("UTF-8");
+		Date nowTime = new Date(System.currentTimeMillis());
+		SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time = sdFormatter.format(nowTime);
 		try {
 			JSONObject chk =  new JSONObject (request.getParameter("data"));
 			System.out.println(chk.toString());
-			Date nowTime = new Date(System.currentTimeMillis());
-			SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String time = sdFormatter.format(nowTime);
 			if (chk.get("action").equals("getrestlist"))
 			{
 				JSONObject jout = new JSONObject();
@@ -62,7 +68,7 @@ public class RestServlet extends HttpServlet {
 				jout.put("data",arr);
 				response.getWriter().append(jout.toString());
 			}
-			if (chk.get("action").equals("getcuisinelist"))
+			if (chk.get("action").equals("getrestcuisinelist"))
 			{
 				JSONObject jout = new JSONObject();
 				JSONArray arr = new JSONArray();
@@ -98,10 +104,12 @@ public class RestServlet extends HttpServlet {
 				String begin = chk.get("statstart").toString();
 				String end = chk.get("statend").toString();
 				arr = RestBean.RestQueryHot(rest_id, begin, end);
+				arr = makeJsonArray.MakeQuery(arr,rest_id);
 				double income = RestBean.RestQueryProfit(rest_id, begin, end);
 				jout.put("result","ok");
 				jout.put("revenue",income);
-				jout.put("data",arr);
+				jout.put("popularcuisine",arr);
+				System.out.println(jout.toString());
 				response.getWriter().append(jout.toString());
 			}
 			if (chk.get("action").equals("setorderdeliverer"))
@@ -110,31 +118,13 @@ public class RestServlet extends HttpServlet {
 				JSONArray arr = new JSONArray();
 				String oid = chk.get("oid").toString();
 				String delivererid = chk.get("delivererid").toString();
-				double fee = (double) chk.get("delivererfee");
+				double fee = chk.getDouble("delivererfee");
 				DeliveryBean.setDelivery(oid,delivererid,fee);
 				jout.put("result","ok");
 				response.getWriter().append(jout.toString());
 			}
 			
-			if (chk.get("action").equals("submitorder"))
-			{
-				String uid = chk.getString("uid");
-				String rid = chk.getString("rid");
-				double total = chk.getDouble("total");
-				JSONArray cui = chk.getJSONArray("data");
-				
-				String oid = OrderBean.addOrder(uid,rid,time,total);
-				if (!(oid.equals("error")))
-				{	
-					for (int i=0;i< cui.length();i++)
-					{
-						JSONObject cuisine = cui.getJSONObject(i);
-						String cid = cuisine.getString("cid");
-						int camount = cuisine.getInt("camount");
-						DetailBean.addDetail(oid,rid,cid,camount);
-					}
-				}
-			}
+			
 			if (chk.get("action").equals("createcuisine"))
 			{
 				JSONObject jout = new JSONObject();
@@ -142,8 +132,16 @@ public class RestServlet extends HttpServlet {
 				String cname = chk.get("cname").toString();
 				String cdesc = chk.get("cdesc").toString();
 				double cprice = chk.getDouble("cprice");
-				MenuBean.setCuisine(rid,cname,cdesc,cprice);
+				String cid = MenuBean.setCuisine(rid,cname,cdesc,cprice);
 				jout.put("result","ok");
+				JSONObject o = new JSONObject();
+				o.put("rid", rid);
+				o.put("cid", cid);
+				o.put("cname", cname);
+				o.put("cdesc", cdesc);
+				o.put("cprice", cprice);
+				jout.put("data",o);
+				System.out.println(jout.toString());
 				response.getWriter().append(jout.toString());
 			}
 			if (chk.get("action").equals("deletecuisine"))
@@ -198,7 +196,10 @@ public class RestServlet extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

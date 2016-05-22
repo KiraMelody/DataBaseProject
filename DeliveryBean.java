@@ -27,7 +27,7 @@ public class DeliveryBean {
 	public static void setDelivery(String oid,String did,double fee) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "insert into Delivery(oid,fee,delivererid)" + "values('" + oid + "','" + did +
+			String sql = "insert into Delivery(oid,delivererid,fee)" + "values('" + oid + "','" + did +
 					"','" + fee + "' )";
 			DBOperateTool.add(sql);
 			OrderBean.updateOrder(oid, "delivering");
