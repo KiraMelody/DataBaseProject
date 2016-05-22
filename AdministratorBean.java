@@ -59,9 +59,9 @@ public class AdministratorBean {
 		try{
 			String sql = "select distinct restaurant.rname,rdesc,cname "
 					+ "from restaurant,detail,menu,( "
-						+"	select max(cnum) as cmax, rid"
-						+"	from (select count(*) as cnum, cid, detail.rid from detail,order "
-							+	"where order.oid = detail.oid and order.odatetime > '"+ begin + "' and order.odatetime < '" + end + "' "
+						+ "	select max(cnum) as cmax, rid"
+						+ "	from (select count(*) as cnum, cid, detail.rid from detail,order "
+							+ "where order.oid = detail.oid and order.odatetime > '" + begin + "' and order.odatetime < '" + end + "' "
 									+ "group by cid, detail.rid "
 								+ "	) as T group by rid) as S,(select count(*) as cnum, cid, detail.rid from detail,order "
 								+ "	where order.oid = detail.oid and order.odatetime > '" + begin  + "' and order.odatetime < '" + end + "' "
@@ -69,6 +69,42 @@ public class AdministratorBean {
 								+ "	) as TT "
 					+ "where restaurant.rid = detail.rid and restaurant.rid = menu.rid and detail .cid = menu.cid and S.rid = restaurant.rid and "
 					+ " TT.rid = restaurant.rid and TT.cnum = S.cmax and TT.cid = detail.cid; ";
+			return DBOperateTool.query(sql);
+			}
+		catch(SQLException e)
+		{
+			e.printStackTrace(System.err);
+		}
+		return null; 
+		
+	}
+	public static JSONArray OrderQuery(String begin,String end) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "select order.oid,restaurant.rid as orestid, restaurant.rname as orestname,restaurant.raddr as orestaddr,restaurant.rtel as oresttel,"
+					+ "order.odatetime,delivery.arrivaltime as ofinishtime,order.ostate,user.uname as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr,"
+					+ "deliverer.deliverername as odeliverername,deliverer.deliverertel as odeliverertel,deliverer.fee as odelivererfee"
+					+ "from restaurant,order,user,delivery,deliverer"
+							+	"where order.oid = delivery.oid and order.odatetime > '"+ begin + "' and order.odatetime < '" + end + "' "
+									+ "and order.rid = restrant.rid and order.uid = user.uid and delivery.delivererid = deliverer.delivererid"
+									+ "order by order.oid";
+			return DBOperateTool.query(sql);
+			}
+		catch(SQLException e)
+		{
+			e.printStackTrace(System.err);
+		}
+		return null; 
+		
+	}
+	public static JSONArray DetailQuery(String begin,String end) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "select order.oid,menu.cid,cname,cprice,cdesc,detail.camount "
+					+ "from detail,order,menu "
+							+	"where order.oid = detail.oid and order.odatetime > '"+ begin + "' and order.odatetime < '" + end + "' "
+									+ "and detail.cid = menu.cid and detail.rid = menu.rid"
+									+ "order by order.oid";
 			return DBOperateTool.query(sql);
 			}
 		catch(SQLException e)

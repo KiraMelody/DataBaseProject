@@ -113,7 +113,7 @@ public class AdminServlet extends HttpServlet {
 				jout.put("data",arr);
 				response.getWriter().append(jout.toString());
 			}
-			if (chk.get("action").equals("getadminreststatistics"))//
+			if (chk.get("action").equals("getadminreststatistics"))
 			{
 				JSONObject jout = new JSONObject();
 				JSONArray arr = new JSONArray();
@@ -127,18 +127,38 @@ public class AdminServlet extends HttpServlet {
 				jout.put("data",arr);
 				response.getWriter().append(jout.toString());
 			}
-			if (chk.get("action").equals("getadminorderstatistics"))//
+			if (chk.get("action").equals("getadminorderstatistics"))
 			{
 				JSONObject jout = new JSONObject();
+				JSONArray ans = new JSONArray();
 				JSONArray arr = new JSONArray();
+				JSONArray cui = new JSONArray();
 				String begin = chk.getString("statstart");
 				String end = chk.getString("staend");
-				JSONObject o = AdministratorBean.QueryAll(begin, end);
-				arr = AdministratorBean.RestQuery(begin,end);
+				//JSONObject o = AdministratorBean.QueryAll(begin, end);
+				arr = AdministratorBean.OrderQuery(begin,end);
+				cui = AdministratorBean.DetailQuery(begin,end);
+				for (int i = 0;i < arr.length();i++)
+				{
+					JSONObject t = arr.getJSONObject(i);
+					JSONArray add = new JSONArray();
+					String oid = t.getString("oid");
+					for (int j = 0;j < cui.length();j++)
+					{
+						JSONObject c = cui.getJSONObject(j);
+						String _oid = c.getString("oid"); 
+						if (_oid.equals(oid))
+						{
+							add.put(c);
+						}
+					}
+					t.put("ocontent", add);
+					ans.put(t);
+				}
 				jout.put("result","ok");
-				jout.put("totalrevenue", o.getDouble("totalrevenue"));
-				jout.put("totalorderamount", o.getDouble("totalorderamount"));
-				jout.put("data",arr);
+				//jout.put("totalrevenue", o.getDouble("totalrevenue"));
+				//jout.put("totalorderamount", o.getDouble("totalorderamount"));
+				jout.put("data",ans);
 				response.getWriter().append(jout.toString());
 			}
 		}
