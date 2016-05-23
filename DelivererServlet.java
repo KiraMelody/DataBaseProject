@@ -88,8 +88,12 @@ public class DelivererServlet extends HttpServlet {
 				String begin = chk.get("statstart").toString();
 				String end = chk.get("statend").toString();
 				double fee = DelivererBean.DelivererQueryFee(deliverer_id,begin,end);
+				JSONArray arr = new JSONArray();
+				arr = OrderBean.OrderAllforDelivererStatistics(deliverer_id,begin,end);
+				arr = makeJsonArray.MakeOrder(arr);
 				jout.put("result","ok");
-				jout.put("data",fee);
+				jout.put("totalsalary",fee);
+				jout.put("data", arr);
 				response.getWriter().append(jout.toString());
 			}
 			if (chk.get("action").equals("delivererconfirm"))

@@ -93,7 +93,7 @@ public class DelivererBean {
 			conn = DBControl.connect();
 			st = conn.createStatement();
 			//System.out.println(deliverer_id);
-			String sql = "select sum(fee) as sum from delivery where delivererid = '" + deliverer_id + "'" + " and arrivaltime > '" + begin + "' and arrivaltime < '" + end + "'";
+			String sql = "select sum(fee) as sum from delivery where delivererid = '" + deliverer_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'";
 			rs = st.executeQuery(sql);
 			double fee = 0;
 			if (rs.next())

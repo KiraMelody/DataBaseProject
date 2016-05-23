@@ -178,7 +178,7 @@ public class AdministratorBean {
 		try{
 			String sql = "select max(rid) as cnt from restaurant";
 			JSONArray arr = DBOperateTool.query(sql);
-			int number = 0;
+			int number = 10000000;
 			if (arr.length()!=0)
 				arr.getJSONObject(0).getInt("cnt");
 			String rid=String.valueOf(number+1);

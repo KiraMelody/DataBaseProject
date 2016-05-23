@@ -192,8 +192,8 @@ public class AdminServlet extends HttpServlet {
 						{
 							t.put("odeliverername", g.getString("deliverername"));
 							t.put("odeliverertel", g.getString("deliverertel"));
-							t.put("oarrivaltime", g.getString("arrivaltime"));
-							t.put("odelivererfee", g.getString("fee"));
+							if (!g.isNull("arrivaltime"))t.put("oarrivaltime", g.getString("arrivaltime"));
+							if (!g.isNull("arrivaltime"))t.put("odelivererfee", g.getString("fee"));
 							break;
 						}
 					}

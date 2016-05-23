@@ -22,8 +22,9 @@ public class DetailBean {
 	public static void addDetail(String oid,String rid,String cid,int camount) throws ClassNotFoundException, SQLException, JSONException
 	{
 		try{
-			String ccamount = String.valueOf(camount);
-			String sql = "insert into detail(oid,rid,cid,camount)" + "values('" + oid + "','" + rid + "','" + cid + "'," + ccamount + ")";
+			//String ccamount = String.valueOf(camount);
+			String sql = "insert into detail(oid,rid,cid,camount)" + "values('" + oid + "','" + rid + "','" + cid + "'," + camount + ")";
+			System.out.println(sql);
 			DBOperateTool.add(sql); 
 		}
 		catch(SQLException e)

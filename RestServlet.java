@@ -96,7 +96,6 @@ public class RestServlet extends HttpServlet {
 							{
 								o.put("odeliverername", t.getString("deliverername"));
 								o.put("odeliverertel", t.getString("deliverertel"));
-								o.put("oarrivaltime", t.getString("arrivaltime"));
 								o.put("odelivererfee", t.getString("fee"));
 								break;
 							}

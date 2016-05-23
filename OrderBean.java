@@ -24,13 +24,14 @@ public class OrderBean {
 			st = conn.createStatement();
 			String sql = "select max(oid) from order";
 			rs = st.executeQuery(sql);
-			int number=0;
+			int number;
 			if(rs.next())
 			{
 				number = rs.getInt(1);
 			}
 			else
-				number = 0;
+				number = 10000000;
+			if (number < 10000000) number = 10000000;
 			String str=String.valueOf(number+1);
 			System.out.println(total);
 			sql = "insert into Order(oid,uid,rid,odatetime,ostate,total,cost)" + "values('" + str + "','" + uid +
@@ -127,6 +128,23 @@ public class OrderBean {
 					+ "from user,order,restaurant,delivery,deliverer "
 					+ "where order.uid = user.uid and order.rid = restaurant.rid and order.oid = delivery.oid and "
 					+ "delivery.delivererid = deliverer.delivererid and delivery.delivererid = '" + deliverer_id + "' order by odatetime desc";
+			System.out.println(deliverer_id);
+			return DBOperateTool.query(sql);
+		}
+		catch(SQLException e){
+			e.printStackTrace(System.err);
+		} 
+		return null;
+	}
+	public static JSONArray OrderAllforDelivererStatistics(String deliverer_id,String begin,String end) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "select distinct order.rid,rname,order.oid,order.odatetime,ostate,total,user.uid,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr,deliverer.deliverername as odeliverername,deliverer.deliverertel as odeliverertel,delivery.fee as odelivererfee,delivery.arrivaltime as oarrivaltime "
+					+ "from user,order,restaurant,delivery,deliverer "
+					+ "where order.uid = user.uid and order.rid = restaurant.rid and order.oid = delivery.oid and "
+					+ " order.odatetime > '"+ begin + "' and order.odatetime < '" + end + "' and "
+					+ "delivery.delivererid = deliverer.delivererid and delivery.delivererid = '" + deliverer_id + "' order by odatetime desc";
+			System.out.println(deliverer_id);
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){

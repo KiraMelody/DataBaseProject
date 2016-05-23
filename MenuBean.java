@@ -63,7 +63,7 @@ public class MenuBean {
 		try{
 			String sql = "select max(cid) as cnt from menu where rid ='" + rid + "'";
 			JSONArray arr = DBOperateTool.query(sql);
-			int number = 0;
+			int number = 10000000;
 			JSONObject o = arr.getJSONObject(0);
 			if (!o.isNull("cnt"))number = o.getInt("cnt");
 			String cid = String.valueOf(number+1);

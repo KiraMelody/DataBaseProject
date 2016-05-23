@@ -37,7 +37,7 @@ public class UserBean {
 				number = rs.getInt(1);
 			}
 			else
-				number = 0;
+				number = 10000000;
 			String str=String.valueOf(number+1);
 			user.setUser_id(str);
 			sql = "insert into User(uid,username,tel,address)" + "values('" + user.getId() + "','" + user.getUsername() +
