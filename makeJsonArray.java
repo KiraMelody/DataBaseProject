@@ -87,10 +87,6 @@ public class makeJsonArray {
 				String oid = t.getString("oid");
 				if (oid.equals(o.get("oid").toString()))
 					oarr.put(t);
-				if (!o.get("ostate").toString().equals("pending"))
-				{
-					
-				}
 			}
 			o.put("ocontent", oarr);
 			ans.put(o);

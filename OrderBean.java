@@ -128,7 +128,7 @@ public class OrderBean {
 					+ "from user,order,restaurant,delivery,deliverer "
 					+ "where order.uid = user.uid and order.rid = restaurant.rid and order.oid = delivery.oid and "
 					+ "delivery.delivererid = deliverer.delivererid and delivery.delivererid = '" + deliverer_id + "' order by odatetime desc";
-			System.out.println(sql);
+
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){
