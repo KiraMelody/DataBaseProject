@@ -48,6 +48,8 @@ public class DelivererServlet extends HttpServlet {
 		Date nowTime = new Date(System.currentTimeMillis());
 		SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String time = sdFormatter.format(nowTime);
+		response.setContentType("text/json");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			chk = new JSONObject (request.getParameter("data"));
 			System.out.println(chk.get("action"));

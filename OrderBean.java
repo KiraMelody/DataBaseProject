@@ -32,10 +32,10 @@ public class OrderBean {
 			else
 				number = 0;
 			String str=String.valueOf(number+1);
-			String ttotal=String.valueOf(total);
+			System.out.println(total);
 			sql = "insert into Order(oid,uid,rid,odatetime,ostate,total,cost)" + "values('" + str + "','" + uid +
-			"','" + rid + "','" + time + "','pending'," + ttotal +"," + ttotal + ")";
-			int nResult = st.executeUpdate(sql);
+			"','" + rid + "','" + time + "','pending'," + total +"," + total + ")";
+			st.executeUpdate(sql);
 			return str;
 		}
 		catch(SQLException e){
@@ -93,7 +93,10 @@ public class OrderBean {
 	public static JSONArray OrderAllforUser(String user_id) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select * from order where uid = '" + user_id + "' order by odatetime desc";
+			String sql = "select distinct order.rid,rname,order.oid,order.odatetime,ostate,total,user.uid,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr "
+					+ "from user,order,restaurant "
+					+ "where order.uid = user.uid and order.rid = restaurant.rid "
+					+ "and order.uid = '" + user_id + "' order by odatetime desc";
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){
@@ -105,7 +108,10 @@ public class OrderBean {
 	public static JSONArray OrderAllforRest(String rest_id) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select * from order where rid = '" + rest_id + "' order by odatetime desc";
+			String sql = "select distinct order.rid,rname,order.oid,order.odatetime,ostate,total,user.uid,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr "
+					+ "from user,order,restaurant "
+					+ "where order.uid = user.uid and order.rid = restaurant.rid and "
+					+ "order.rid = '" + rest_id + "' order by odatetime desc";
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){
@@ -117,7 +123,10 @@ public class OrderBean {
 	public static JSONArray OrderAllforDeliverer(String deliverer_id) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select order.oid,uid,odatetime,ostate,total from order,delivery where delivererid = '" + deliverer_id + "' and order.oid = delivery.oid order by odatetime desc";
+			String sql = "select distinct order.rid,rname,order.oid,order.odatetime,ostate,total,user.uid,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr,deliverer.deliverername as odeliverername,deliverer.deliverertel as odeliverertel,delivery.fee as odelivererfee,delivery.arrivaltime as oarrivaltime "
+					+ "from user,order,restaurant,delivery,deliverer "
+					+ "where order.uid = user.uid and order.rid = restaurant.rid and order.oid = delivery.oid and "
+					+ "delivery.delivererid = deliverer.delivererid and delivery.delivererid = '" + deliverer_id + "' order by odatetime desc";
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){
@@ -125,7 +134,20 @@ public class OrderBean {
 		} 
 		return null;
 	}
-	
+	public static JSONArray addOrderDelivery(String rest_id) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "select distinct order.oid,deliverername,deliverertel,delivery.arrivaltime,delivery.fee "
+					+ "from order,delivery,deliverer "
+					+ "where order.oid = delivery.oid and delivery.delivererid = deliverer.delivererid and "
+					+ "order.rid = '" + rest_id + "' order by order.oid desc";
+			return DBOperateTool.query(sql);
+		}
+		catch(SQLException e){
+			e.printStackTrace(System.err);
+		} 
+		return null;
+	}
 	public static Order getOrder(String order_id) throws ClassNotFoundException
 	{
 		Connection conn = null;

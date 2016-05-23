@@ -147,10 +147,10 @@ public class UserBean {
 		}
 		return null;
 	}
-	public static void updateUserInfo(String uid,String username,String tel,String addr) throws ClassNotFoundException, JSONException
+	public static void updateUserInfo(String uid,String tel,String addr) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "update User set username = '" + username + "' , tel = '" + tel
+			String sql = "update User set tel = '" + tel
 					+ "' , address = '" + addr
 					+ "' where uid = '" + uid + "'";
 			DBOperateTool.update(sql);

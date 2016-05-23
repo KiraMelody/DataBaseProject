@@ -68,10 +68,11 @@ public class UserServlet extends HttpServlet {
 			{
 				JSONObject jout = new JSONObject();
 				String user_id = chk.get("uid").toString();
-				String username = chk.get("username").toString();
 				String tel = chk.get("tel").toString();
 				String address = chk.get("address").toString();
-				UserBean.updateUserInfo (user_id,username,tel,address);
+				UserBean.updateUserInfo (user_id,tel,address);
+				jout.put("result","ok");
+				response.getWriter().append(jout.toString());
 			}
 			if (chk.get("action").equals("confirmorder"))
 			{

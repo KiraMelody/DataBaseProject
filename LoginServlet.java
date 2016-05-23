@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
 			JSONObject jout = new JSONObject();
 			jout.put("result", "ok");
 			String uid = LoginBean.login(username,password,userrole,nowtime);
-			if (uid != null && uid != "error")
+			if (uid != null && (!uid.equals("error")))
 			{
 				//HttpSession session = request.getSession();
 				//session.setAttribute("session_userinfo", user);
@@ -86,7 +86,9 @@ public class LoginServlet extends HttpServlet {
 			}
 			else
 			{
-				response.getWriter().append("error");
+				//System.out.println("error");
+				jout.put("result", "error");
+				//response.getWriter().append(jout.toString());
 			}
 			response.getWriter().append(jout.toString());
 			}

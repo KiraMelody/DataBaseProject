@@ -25,19 +25,7 @@ public class DetailBean {
 			String ccamount = String.valueOf(camount);
 			String sql = "insert into detail(oid,rid,cid,camount)" + "values('" + oid + "','" + rid + "','" + cid + "'," + ccamount + ")";
 			DBOperateTool.add(sql); 
-			sql = "select * from detail where rid = '" + rid + "' and cid = '" + cid + "'";
-			JSONArray st = DBOperateTool.query(sql);
-			if (st != null)
-			{
-				sql = "update detail set camount = camount + 1 where rid = '" + rid + "' and cid = '" + cid + "'";
-				DBOperateTool.update(sql);
-			}
-			else
-			{
-				sql = "insert into detail(rid,cid,camount)" + "values('" + rid + "','" + cid + "',1)";
-				DBOperateTool.add(sql);
-			}
-			}
+		}
 		catch(SQLException e)
 		{
 			e.printStackTrace(System.err);

@@ -81,10 +81,30 @@ public class RestServlet extends HttpServlet {
 			{
 				JSONObject jout = new JSONObject();
 				JSONArray arr = new JSONArray();
+				JSONArray ans = new JSONArray();
 				arr = OrderBean.OrderAllforRest(chk.get("rid").toString());
 				arr = makeJsonArray.MakeOrder(arr);
+				JSONArray darr = OrderBean.addOrderDelivery(chk.get("rid").toString());
+				for (int i = 0;i< arr.length();i++)
+				{
+						JSONObject o = arr.getJSONObject(i);
+						for (int j = 0;j < darr.length();j++)
+						{
+							JSONObject t = darr.getJSONObject(j);
+							String oid = t.getString("oid");
+							if (oid.equals(o.getString("oid")))
+							{
+								o.put("odeliverername", t.getString("deliverername"));
+								o.put("odeliverertel", t.getString("deliverertel"));
+								o.put("oarrivaltime", t.getString("arrivaltime"));
+								o.put("odelivererfee", t.getString("fee"));
+								break;
+							}
+						}
+						ans.put(o);
+				}		
 				jout.put("result","ok");
-				jout.put("data",arr);
+				jout.put("data",ans);
 				response.getWriter().append(jout.toString());
 			}
 			if (chk.get("action").equals("getdelivererlist"))

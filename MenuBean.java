@@ -13,6 +13,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MenuBean {
+	public static JSONArray MakeCuisine () throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "select detail.oid,menu.cid,menu.rid,cname,cdesc,cprice,camount from menu,detail where menu.cid = detail.cid and detail.rid = menu.rid group by detail.oid,menu.cid,menu.rid,menu.rid,cname,cdesc,cprice,camount";
+			return DBOperateTool.query(sql);
+		}
+		catch(SQLException e){
+			e.printStackTrace(System.err);
+		}
+		return null; 
+		}
 	public static JSONArray getMenuforRest(String rest_id) throws ClassNotFoundException, JSONException
 	{
 		try{

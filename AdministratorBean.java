@@ -17,7 +17,7 @@ public class AdministratorBean {
 	public static JSONArray RestAll() throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select * from restaurant";
+			String sql = "select rid,rname,tel as rtel,address as raddr,rdesc from restaurant";
 			return DBOperateTool.query(sql);
 			}
 		catch(SQLException e)
@@ -80,7 +80,7 @@ public class AdministratorBean {
 	public static JSONArray addRestQuery(String begin,String end) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select order.rid,count(order.oid) as rorderamount,sum(order.total) as rrevenue "
+			String sql = "select distinct order.rid,count(order.oid) as rorderamount,sum(order.total) as rrevenue "
 					+ "from order where order.odatetime > '"+ begin + "' and order.odatetime < '" + end + "' group by order.rid order by order.rid";				
 			return DBOperateTool.query(sql);
 			}
@@ -93,7 +93,7 @@ public class AdministratorBean {
 	public static JSONArray OrderQuery(String begin,String end) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select order.oid,restaurant.rid as orestid, restaurant.rname as orestname,restaurant.address as orestaddr,restaurant.tel as oresttel, "
+			String sql = "select distinct order.oid,restaurant.rid as orestid, restaurant.rname as orestname,restaurant.address as orestaddr,restaurant.tel as oresttel, "
 					+ "order.odatetime,delivery.arrivaltime as ofinishtime,order.ostate,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr, "
 					+ "deliverer.deliverername as odeliverername,deliverer.deliverertel as odeliverertel,delivery.fee as odelivererfee "
 					+ "from restaurant,order,user,delivery,deliverer "
@@ -113,7 +113,7 @@ public class AdministratorBean {
 	public static JSONArray DetailQuery(String begin,String end) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select order.oid,menu.cid,cname,cprice,cdesc,detail.camount "
+			String sql = "select distinct order.oid,menu.cid,cname,cprice,cdesc,detail.camount "
 					+ "from detail,order,menu "
 							+	"where order.oid = detail.oid and order.odatetime > '"+ begin + "' and order.odatetime < '" + end + "' "
 									+ "and detail.cid = menu.cid and detail.rid = menu.rid "
