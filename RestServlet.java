@@ -109,7 +109,6 @@ public class RestServlet extends HttpServlet {
 				jout.put("result","ok");
 				jout.put("revenue",income);
 				jout.put("popularcuisine",arr);
-				System.out.println(jout.toString());
 				response.getWriter().append(jout.toString());
 			}
 			if (chk.get("action").equals("setorderdeliverer"))

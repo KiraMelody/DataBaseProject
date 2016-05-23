@@ -29,13 +29,15 @@ public class UserBean {
 				exists=true;
 			rs.close();
 			if (exists) return false;
-			sql = "select count(*) from user";
+			sql = "select max(uid) from user";
 			rs = st.executeQuery(sql);
 			int number=0;
-			while(rs.next())
+			if(rs.next())
 			{
 				number = rs.getInt(1);
 			}
+			else
+				number = 0;
 			String str=String.valueOf(number+1);
 			user.setUser_id(str);
 			sql = "insert into User(uid,username,tel,address)" + "values('" + user.getId() + "','" + user.getUsername() +

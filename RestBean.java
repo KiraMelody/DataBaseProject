@@ -93,7 +93,6 @@ public class RestBean {
 			try{
 				conn = DBControl.connect();
 				st = conn.createStatement();
-				System.out.println(rest_id + begin + end);
 				String sql = "select sum(total) as sum from order where rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'";
 				rs = st.executeQuery(sql);
 				double profit = 0.0;
@@ -148,7 +147,6 @@ public class RestBean {
 				String sql = "select cid,count(order.oid) as camount from order,detail "
 						+ "where order.oid = detail.oid and order.rid = detail.rid and order.rid = '" + rest_id + "'" + " and odatetime > '" + begin + "' and odatetime < '" + end + "'"
 						+ "group by cid order by 2 desc";
-				//System.out.println(DBOperateTool.query(sql).toString());
 				return DBOperateTool.query(sql);
 			}
 			catch(SQLException e){

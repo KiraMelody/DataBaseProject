@@ -22,13 +22,15 @@ public class OrderBean {
 		try{
 			conn = DBControl.connect();
 			st = conn.createStatement();
-			String sql = "select count(*) from order";
+			String sql = "select max(oid) from order";
 			rs = st.executeQuery(sql);
 			int number=0;
-			while(rs.next())
+			if(rs.next())
 			{
 				number = rs.getInt(1);
 			}
+			else
+				number = 0;
 			String str=String.valueOf(number+1);
 			String ttotal=String.valueOf(total);
 			sql = "insert into Order(oid,uid,rid,odatetime,ostate,total,cost)" + "values('" + str + "','" + uid +

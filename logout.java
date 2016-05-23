@@ -64,6 +64,9 @@ public class logout extends HttpServlet {
 				}
 				String sql = "delete from login where uid = '" + uid + "' and userrole = '" + userrole + "'";
 				DBOperateTool.delete(sql);
+				JSONObject jout = new JSONObject();
+				jout.put("result", "ok");
+				response.getWriter().append(jout.toString());
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

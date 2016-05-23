@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MenuBean {
 	public static JSONArray getMenuforRest(String rest_id) throws ClassNotFoundException, JSONException
@@ -49,10 +50,12 @@ public class MenuBean {
 	public static String setCuisine(String rid,String cname,String cdesc,double cprice) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select count(*) as cnt from menu where rid ='" + rid + "'";
+			String sql = "select max(cid) as cnt from menu where rid ='" + rid + "'";
 			JSONArray arr = DBOperateTool.query(sql);
-			int number = arr.getJSONObject(0).getInt("cnt");
-			String cid=String.valueOf(number+1);
+			int number = 0;
+			JSONObject o = arr.getJSONObject(0);
+			if (!o.isNull("cnt"))number = o.getInt("cnt");
+			String cid = String.valueOf(number+1);
 			sql = "insert into menu(cid,cname,rid,cdesc,cprice) values('" + cid + "','" + cname + "','" + rid + "','" + cdesc + "'," + cprice + ")";
 			DBOperateTool.add(sql);
 			return cid;
