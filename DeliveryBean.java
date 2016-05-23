@@ -32,7 +32,6 @@ public class DeliveryBean {
 					"','" + fee + "' )";
 			DBOperateTool.add(sql);
 			OrderBean.updateOrder(oid, "delivering");
-			DBOperateTool.update(sql);
 			}
 		catch(SQLException e)
 		{

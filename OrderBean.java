@@ -124,11 +124,11 @@ public class OrderBean {
 	public static JSONArray OrderAllforDeliverer(String deliverer_id) throws ClassNotFoundException, JSONException
 	{
 		try{
-			String sql = "select distinct order.rid,rname,order.oid,order.odatetime,ostate,total,user.uid,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr,deliverer.deliverername as odeliverername,deliverer.deliverertel as odeliverertel,delivery.fee as odelivererfee,delivery.arrivaltime as oarrivaltime "
+			String sql = "select distinct order.rid,rname,order.oid,order.odatetime,ostate,total,user.uid,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr,deliverer.deliverername as odeliverername,deliverer.deliverertel as odeliverertel,delivery.fee as odelivererfee "//,delivery.arrivaltime as oarrivaltime "
 					+ "from user,order,restaurant,delivery,deliverer "
 					+ "where order.uid = user.uid and order.rid = restaurant.rid and order.oid = delivery.oid and "
 					+ "delivery.delivererid = deliverer.delivererid and delivery.delivererid = '" + deliverer_id + "' order by odatetime desc";
-			System.out.println(deliverer_id);
+			System.out.println(sql);
 			return DBOperateTool.query(sql);
 		}
 		catch(SQLException e){
