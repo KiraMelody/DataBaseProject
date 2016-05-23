@@ -169,6 +169,8 @@ public class AdminServlet extends HttpServlet {
 				System.out.println(arr.toString());
 				cui = AdministratorBean.DetailQuery(begin,end);
 				System.out.println(cui.toString());
+				JSONArray darr = AdministratorBean.addOrderDelivery(begin,end);
+				System.out.println(darr.toString());
 				for (int i = 0;i < arr.length();i++)
 				{
 					JSONObject t = arr.getJSONObject(i);
@@ -181,6 +183,18 @@ public class AdminServlet extends HttpServlet {
 						if (_oid.equals(oid))
 						{
 							add.put(c);
+						}
+					}
+					for (int j = 0;j < darr.length();j++)
+					{
+						JSONObject g = darr.getJSONObject(j);
+						if (oid.equals(g.getString("oid").toString()))
+						{
+							t.put("odeliverername", g.getString("deliverername"));
+							t.put("odeliverertel", g.getString("deliverertel"));
+							t.put("oarrivaltime", g.getString("arrivaltime"));
+							t.put("odelivererfee", g.getString("fee"));
+							break;
 						}
 					}
 					t.put("ocontent", add);

@@ -94,12 +94,12 @@ public class AdministratorBean {
 	{
 		try{
 			String sql = "select distinct order.oid,restaurant.rid as orestid, restaurant.rname as orestname,restaurant.address as orestaddr,restaurant.tel as oresttel, "
-					+ "order.odatetime,delivery.arrivaltime as ofinishtime,order.ostate,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr, "
-					+ "deliverer.deliverername as odeliverername,deliverer.deliverertel as odeliverertel,delivery.fee as odelivererfee "
+					+ "order.odatetime,delivery.arrivaltime as ofinishtime,order.ostate,user.username as oconsumername,user.tel as oconsumertel,user.address as oconsumeraddr "
+					//+ "deliverer.deliverername as odeliverername,deliverer.deliverertel as odeliverertel,delivery.fee as odelivererfee "
 					+ "from restaurant,order,user,delivery,deliverer "
 							+ " where order.rid = restaurant.rid and "
 							+ " order.odatetime > '"+ begin + "' and order.odatetime < '" + end + "' "
-									+ "and order.oid = delivery.oid and order.uid = user.uid and delivery.delivererid = deliverer.delivererid "
+									+ "and order.uid = user.uid  "
 									+ "order by order.oid";
 			return DBOperateTool.query(sql);
 			}
@@ -109,6 +109,21 @@ public class AdministratorBean {
 		}
 		return null; 
 		
+	}
+	public static JSONArray addOrderDelivery(String begin,String end) throws ClassNotFoundException, JSONException
+	{
+		try{
+			String sql = "select distinct order.oid,deliverername,deliverertel,delivery.arrivaltime,delivery.fee "
+					+ "from order,delivery,deliverer "
+					+ "where order.oid = delivery.oid and delivery.delivererid = deliverer.delivererid and "
+					+ " order.odatetime > '"+ begin + "' and order.odatetime < '" + end + "' "
+					+ " order by order.oid desc";
+			return DBOperateTool.query(sql);
+		}
+		catch(SQLException e){
+			e.printStackTrace(System.err);
+		} 
+		return null;
 	}
 	public static JSONArray DetailQuery(String begin,String end) throws ClassNotFoundException, JSONException
 	{
